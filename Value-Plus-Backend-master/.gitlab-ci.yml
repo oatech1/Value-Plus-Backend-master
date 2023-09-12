@@ -1,0 +1,37 @@
+stages:
+  - build
+  - deploy-staging
+  - deploy-prod
+
+build:
+  stage: build
+  image: maven:3.6-jdk-11
+  script:
+    - 'mvn package'
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - target/valueplus-0.0.1-SNAPSHOT.jar
+
+deploy-staging:
+  stage: deploy-staging
+  script:
+    - apt-get update -yq
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=valueplus --api-key=$HEROKU_API_KEY
+  only:
+    - master
+
+deploy-prod:
+  stage: deploy-prod
+  script:
+    - apt-get update -yq
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=valueplusprod --api-key=$HEROKU_API_PROD_KEY
+  dependencies:
+    - build
+  only:
+    - prod

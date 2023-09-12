@@ -1,0 +1,12 @@
+branch-defaults:
+  master:
+    environment: Valueplusprod-env-1
+global:
+  application_name: ValuePlusProd
+  default_ec2_keyname:
+  default_platform:
+  default_region: af-south-1
+  sc: git
+  workspace_type: Application
+deploy:
+  artifact: target/valueplus-0.0.1-SNAPSHOT.jar
